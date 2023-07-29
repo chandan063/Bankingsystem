@@ -1,0 +1,119 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class BankingSystem {
+    private static Map<String, Double> accounts = new HashMap<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("Baanking System");
+            System.out.println("1. Create Account");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Check Balance");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline character
+
+            switch (choice) {
+                case 1:
+                    createAccount(scanner);
+                    break;
+                case 2:
+                    deposit(scanner);
+                    break;
+                case 3:
+                    withdraw(scanner);
+                    break;
+                case 4:
+                    checkBalance(scanner);
+                    break;
+                case 5:
+                    System.out.println("Thank you for using the Banking System. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+            System.out.println();
+        } while (choice != 5);
+
+        scanner.close();
+    }
+
+    private static void createAccount(Scanner scanner) {
+        System.out.print("Enter account number: ");
+        String accountNumber = scanner.nextLine();
+        if (accounts.containsKey(accountNumber)) {
+            System.out.println("Account already exists with this account number.");
+        } else {
+            System.out.print("Enter initial deposit amount: ");
+            double initialDeposit = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline character
+
+            if (initialDeposit >= 0) {
+                accounts.put(accountNumber, initialDeposit);
+                System.out.println("Account created successfully.");
+            } else {
+                System.out.println("Invalid initial deposit amount.");
+            }
+        }
+    }
+
+    private static void deposit(Scanner scanner) {
+        System.out.print("Enter account number: ");
+        String accountNumber = scanner.nextLine();
+        if (accounts.containsKey(accountNumber)) {
+            System.out.print("Enter deposit amount: ");
+            double depositAmount = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline character
+
+            if (depositAmount > 0) {
+                double currentBalance = accounts.get(accountNumber);
+                accounts.put(accountNumber, currentBalance + depositAmount);
+                System.out.println("Deposit successful. Current balance: " + accounts.get(accountNumber));
+            } else {
+                System.out.println("Invalid deposit amount.");
+            }
+        } else {
+            System.out.println("Account does not exist with this account number.");
+        }
+    }
+
+    private static void withdraw(Scanner scanner) {
+        System.out.print("Enter account number: ");
+        String accountNumber = scanner.nextLine();
+        if (accounts.containsKey(accountNumber)) {
+            System.out.print("Enter withdrawal amount: ");
+            double withdrawalAmount = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline character
+
+            double currentBalance = accounts.get(accountNumber);
+            if (withdrawalAmount > 0 && withdrawalAmount <= currentBalance) {
+                accounts.put(accountNumber, currentBalance - withdrawalAmount);
+                System.out.println("Withdrawal successful. Current balance: " + accounts.get(accountNumber));
+            } else {
+                System.out.println("Invalid withdrawal amount or insufficient funds.");
+            }
+        } else {
+            System.out.println("Account does not exist with this account number.");
+        }
+    }
+
+    private static void checkBalance(Scanner scanner) {
+        System.out.print("Enter account number: ");
+        String accountNumber = scanner.nextLine();
+        if (accounts.containsKey(accountNumber)) {
+            double currentBalance = accounts.get(accountNumber);
+            System.out.println("Account balance: " + currentBalance);
+        } else {
+            System.out.println("Account does not exist with this account number.");
+        }
+    }
+}
+
